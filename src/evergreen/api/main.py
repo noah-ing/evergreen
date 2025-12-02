@@ -126,6 +126,12 @@ async def health_check() -> HealthResponse:
     )
 
 
+@app.get("/healthz")
+async def healthz() -> dict[str, str]:
+    """Simple liveness probe - no DB check."""
+    return {"status": "ok"}
+
+
 @app.get("/")
 async def root() -> dict[str, str]:
     """Root endpoint with basic info."""
