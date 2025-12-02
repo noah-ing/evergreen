@@ -1,0 +1,121 @@
+[tool.poetry]
+name = "evergreen"
+version = "0.1.0"
+description = "Institutional Memory as a Service - Cross-system knowledge retrieval for SMBs"
+authors = ["Evergreen Team"]
+readme = "README.md"
+packages = [{include = "evergreen", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Core
+pydantic = "^2.5"
+pydantic-settings = "^2.1"
+httpx = "^0.26"
+python-dotenv = "^1.0"
+
+# Async
+asyncio = "^3.4"
+aiofiles = "^23.2"
+
+# API
+fastapi = "^0.109"
+uvicorn = {extras = ["standard"], version = "^0.27"}
+
+# LLM & RAG
+llama-index = "^0.10"
+langchain = "^0.1"
+langgraph = "^0.0.40"
+openai = "^1.10"
+anthropic = "^0.18"
+cohere = "^4.40"
+voyageai = "^0.2"
+
+# Vector & Graph
+qdrant-client = "^1.7"
+falkordb = "^1.0"
+
+# Entity Extraction
+gliner = "^0.2"
+spacy = "^3.7"
+
+# HuggingFace (pinned to v4.x for stability - v5 RC released Dec 1 2025)
+transformers = ">=4.57,<5.0"
+sentence-transformers = "^2.3"
+
+# Microsoft 365
+msgraph-sdk = "^1.2"
+azure-identity = "^1.15"
+
+# Google Workspace
+google-api-python-client = "^2.110"
+google-auth = "^2.25"
+google-auth-oauthlib = "^1.2"
+
+# Document Parsing
+beautifulsoup4 = "^4.12"
+html2text = "^2020.1.16"
+python-docx = "^1.1"
+PyPDF2 = "^3.0"
+python-pptx = "^0.6"
+
+# Utils
+structlog = "^24.1"
+tenacity = "^8.2"
+python-dateutil = "^2.8"
+
+# Authentication
+python-jose = {extras = ["cryptography"], version = "^3.3"}
+passlib = {extras = ["bcrypt"], version = "^1.7"}
+bcrypt = "^4.1"
+email-validator = "^2.0"
+
+# Database
+sqlalchemy = {extras = ["asyncio"], version = "^2.0"}
+asyncpg = "^0.29"
+alembic = "^1.13"
+greenlet = "^3.0"
+
+# Background Tasks
+celery = {extras = ["redis"], version = "^5.3"}
+redis = "^5.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4"
+pytest-asyncio = "^0.23"
+pytest-cov = "^4.1"
+mypy = "^1.8"
+ruff = "^0.1"
+black = "^24.1"
+ipython = "^8.20"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # Pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = ["E501"]  # line too long (handled by formatter)
+
+[tool.ruff.isort]
+known-first-party = ["evergreen"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
