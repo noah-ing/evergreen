@@ -35,6 +35,9 @@ def get_async_database_url() -> str:
     # Railway uses postgres:// but SQLAlchemy needs postgresql://
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql://", 1)
+    # Fix malformed URLs with empty port (e.g., @host:/db -> @host:5432/db)
+    import re
+    url = re.sub(r'(@[^/:]+):(\d*)/', lambda m: f'{m.group(1)}:{m.group(2) or "5432"}/', url)
     # Convert to async
     if url.startswith("postgresql://"):
         url = url.replace("postgresql://", "postgresql+asyncpg://", 1)

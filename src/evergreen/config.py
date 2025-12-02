@@ -78,9 +78,14 @@ class Settings(BaseSettings):
     @field_validator("database_url", mode="before")
     @classmethod
     def fix_postgres_scheme(cls, v: str) -> str:
-        """Railway uses postgres:// but SQLAlchemy needs postgresql://"""
-        if v and v.startswith("postgres://"):
-            return v.replace("postgres://", "postgresql://", 1)
+        """Railway uses postgres:// but SQLAlchemy needs postgresql://
+        Also fix malformed URLs with empty port."""
+        import re
+        if v:
+            if v.startswith("postgres://"):
+                v = v.replace("postgres://", "postgresql://", 1)
+            # Fix empty port (e.g., @host:/db -> @host:5432/db)
+            v = re.sub(r'(@[^/:]+):(\d*)/', lambda m: f'{m.group(1)}:{m.group(2) or "5432"}/', v)
         return v
 
     @property
