@@ -38,7 +38,23 @@ async def lifespan(app: FastAPI):
         environment=settings.environment,
     )
     
-    # Initialize database
+    # Run database migrations
+    try:
+        import subprocess
+        result = subprocess.run(
+            ["alembic", "upgrade", "head"],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        if result.returncode == 0:
+            logger.info("Database migrations completed successfully")
+        else:
+            logger.error("Migration failed", stderr=result.stderr)
+    except Exception as e:
+        logger.error("Migration error", error=str(e))
+    
+    # Initialize database connection
     await init_db()
     logger.info("Database initialized")
     
