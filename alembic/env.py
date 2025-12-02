@@ -31,7 +31,14 @@ target_metadata = Base.metadata
 # Get database URL directly from env var (Railway provides DATABASE_URL)
 # Convert postgres:// to postgresql+asyncpg:// for async SQLAlchemy
 def get_async_database_url() -> str:
-    url = os.environ.get("DATABASE_URL", "postgresql://evergreen:evergreen@localhost:5432/evergreen")
+    raw_url = os.environ.get("DATABASE_URL", "")
+    print(f"[DEBUG] Raw DATABASE_URL: {raw_url[:50]}..." if len(raw_url) > 50 else f"[DEBUG] Raw DATABASE_URL: {raw_url}")
+    
+    if not raw_url:
+        print("[DEBUG] DATABASE_URL not set, using default")
+        raw_url = "postgresql://evergreen:evergreen@localhost:5432/evergreen"
+    
+    url = raw_url
     # Railway uses postgres:// but SQLAlchemy needs postgresql://
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql://", 1)
@@ -41,6 +48,8 @@ def get_async_database_url() -> str:
     # Convert to async
     if url.startswith("postgresql://"):
         url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    
+    print(f"[DEBUG] Processed URL: {url[:60]}..." if len(url) > 60 else f"[DEBUG] Processed URL: {url}")
     return url
 
 db_url = get_async_database_url()
