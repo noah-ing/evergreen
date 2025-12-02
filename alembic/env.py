@@ -5,6 +5,7 @@ Handles async database migrations.
 """
 
 import asyncio
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import pool
@@ -16,7 +17,6 @@ from alembic import context
 # Import our models so Alembic can detect them
 from evergreen.db import Base
 from evergreen.db.models import Tenant, User, Connection as DBConnection, SyncJob, AuditLog
-from evergreen.config import settings
 
 # Alembic Config object
 config = context.config
@@ -28,8 +28,19 @@ if config.config_file_name is not None:
 # Model metadata for autogenerate
 target_metadata = Base.metadata
 
-# Get database URL from settings (uses the properly formatted async URL)
-db_url = settings.async_database_url
+# Get database URL directly from env var (Railway provides DATABASE_URL)
+# Convert postgres:// to postgresql+asyncpg:// for async SQLAlchemy
+def get_async_database_url() -> str:
+    url = os.environ.get("DATABASE_URL", "postgresql://evergreen:evergreen@localhost:5432/evergreen")
+    # Railway uses postgres:// but SQLAlchemy needs postgresql://
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    # Convert to async
+    if url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    return url
+
+db_url = get_async_database_url()
 
 
 def run_migrations_offline() -> None:
