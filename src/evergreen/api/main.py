@@ -106,11 +106,11 @@ class HealthResponse(BaseModel):
 async def health_check() -> HealthResponse:
     """Health check endpoint with database connectivity."""
     from sqlalchemy import text
-    from evergreen.db import async_session_factory
+    from evergreen.db import get_session_factory
     
     db_status = "disconnected"
     try:
-        async with async_session_factory() as session:
+        async with get_session_factory()() as session:
             await session.execute(text("SELECT 1"))
             db_status = "connected"
     except Exception as e:
