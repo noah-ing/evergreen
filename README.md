@@ -1,20 +1,20 @@
-# Evergreen 
+# Evergreen 🌲
 
 **Institutional Memory as a Service** - Cross-system knowledge retrieval for SMBs
 
-> *"What did we promise Acme Corp on that renewal?"* -> Answered in seconds, not 45 minutes.
+> *"What did we promise Acme Corp on that renewal?"* → Answered in seconds, not 45 minutes.
 
 ## What is Evergreen?
 
-Evergreen is a business intelligence platform that captures, indexes, and synthesizes institutional knowledge scattered across an organization's communication and document systems - making it queryable through natural language.
+Evergreen is a business intelligence platform that captures, indexes, and synthesizes institutional knowledge scattered across an organization's communication and document systems—making it queryable through natural language.
 
 ### The Problem
 
 Every SMB has their business truth scattered across:
-- **Email** - deals, client relationships, promises made
-- **Files** - contracts, SOWs, pricing, procedures 
-- **Chat** - Slack/Teams where real decisions happen
-- **People's heads** - the worst one
+- 📧 **Email** - deals, client relationships, promises made
+- 📁 **Files** - contracts, SOWs, pricing, procedures  
+- 💬 **Chat** - Slack/Teams where real decisions happen
+- 🧠 **People's heads** - the worst one
 
 When a key employee leaves, years of context walks out the door. Onboarding takes 3-6 months of tribal knowledge absorption.
 
@@ -28,12 +28,12 @@ Evergreen connects to M365/Google Workspace and builds a living knowledge graph 
 
 ## Features
 
-- ** Natural Language Search**: Ask questions in plain English
-- **️ Knowledge Graph**: Understand relationships between people, projects, and clients
-- ** Source Attribution**: Every answer includes citations
-- ** Real-time Sync**: Delta sync keeps index fresh
-- ** Multi-tenant**: Strict data isolation per organization
-- ** API-first**: Easy integration with existing tools
+- **🔍 Natural Language Search**: Ask questions in plain English
+- **🕸️ Knowledge Graph**: Understand relationships between people, projects, and clients
+- **📊 Source Attribution**: Every answer includes citations
+- **🔄 Real-time Sync**: Delta sync keeps index fresh
+- **🔐 Multi-tenant**: Strict data isolation per organization
+- **📱 API-first**: Easy integration with existing tools
 
 ## Quick Start
 
@@ -83,33 +83,33 @@ COHERE_API_KEY=your-key
 ## Architecture
 
 ```
-┌─────────────────┐ ┌─────────────────┐
-│ M365 / Google │────│ Connectors │
-└─────────────────┘ └────────┬────────┘
- │
- ▼
- ┌─────────────────┐
- │ Ingestion │
- │ Pipeline │
- └────────┬────────┘
- │
- ┌──────────────────┼──────────────────┐
- ▼ ▼ ▼
- ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
- │ Qdrant │ │ FalkorDB │ │ Metadata │
- │ (Vector) │ │ (Graph) │ │ Store │
- └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
- └──────────────────┼──────────────────┘
- ▼
- ┌─────────────────┐
- │ Retrieval │
- │ Engine │
- └────────┬────────┘
- │
- ▼
- ┌─────────────────┐
- │ Query API │
- └─────────────────┘
+┌─────────────────┐     ┌─────────────────┐
+│   M365 / Google │────▶│   Connectors    │
+└─────────────────┘     └────────┬────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   Ingestion     │
+                        │   Pipeline      │
+                        └────────┬────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              ▼                  ▼                  ▼
+      ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+      │   Qdrant    │    │  FalkorDB   │    │  Metadata   │
+      │   (Vector)  │    │   (Graph)   │    │   Store     │
+      └──────┬──────┘    └──────┬──────┘    └──────┬──────┘
+              └──────────────────┼──────────────────┘
+                                 ▼
+                        ┌─────────────────┐
+                        │   Retrieval     │
+                        │   Engine        │
+                        └────────┬────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   Query API     │
+                        └─────────────────┘
 ```
 
 ## Tech Stack
@@ -168,17 +168,17 @@ black src/
 ```bash
 # Register new tenant + user
 curl -X POST http://localhost:8000/api/v1/auth/register \
- -H "Content-Type: application/json" \
- -d '{"email":"admin@company.com","password":"secret","name":"Admin","tenant_name":"My Company","tenant_slug":"my-company"}'
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@company.com","password":"secret","name":"Admin","tenant_name":"My Company","tenant_slug":"my-company"}'
 
 # Login
 curl -X POST http://localhost:8000/api/v1/auth/login \
- -H "Content-Type: application/json" \
- -d '{"email":"admin@company.com","password":"secret"}'
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@company.com","password":"secret"}'
 
 # Get current user (protected)
 curl http://localhost:8000/api/v1/auth/me \
- -H "Authorization: Bearer <access_token>"
+  -H "Authorization: Bearer <access_token>"
 ```
 
 ## License
